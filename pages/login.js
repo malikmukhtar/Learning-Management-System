@@ -1,20 +1,39 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import {toast} from 'react-toastify'
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import {Context} from '../context'
+import { useRouter } from "next/router";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
 
+  //state access
+  const {state, dispatch}=useContext(Context)
+
+  //router
+  const router = useRouter()
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 try {
   setLoading(true)
   const {data} = await axios.post(`/api/login`, { email, password})
-  console.log('Login response', data)
+  // console.log('Login response', data)
+  dispatch({
+    type:'LOGIN',
+    payload:data
+  })
+
+  //save user details in local storage
+  window.localStorage.setItem('user', JSON.stringify(data))
+
+  //redirect to dashboard
+  router.push('/')
+  
   // setLoading(false)
 } catch (err) {
   toast.error(err.response.data)
