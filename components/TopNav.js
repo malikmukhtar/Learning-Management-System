@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import {useRouter} from 'next/router';
 
 
-const { Item, SubMenu } = Menu;
+const { Item, SubMenu, ItemGroup } = Menu;
 
 
 const TopNav = () => {
@@ -64,9 +64,16 @@ const TopNav = () => {
 
       {user !== null && (
         <SubMenu icon={<CoffeeOutlined/>} title={user && user.name} className='ml-auto'>
-          <Item onClick={logout}  className="ml-auto">
+         <ItemGroup>
+           <Item key='/user'>
+        <Link href='/user'>
+          <a>Dashboard</a>
+        </Link>
+           </Item>
+         <Item onClick={logout}  className="ml-auto">
         Logout
       </Item>
+         </ItemGroup>
         </SubMenu>
       )}
     </Menu>
