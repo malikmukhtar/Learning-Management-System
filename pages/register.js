@@ -28,6 +28,9 @@ try {
   setLoading(true)
   const {data} = await axios.post(`/api/register`, {name, email, password})
   toast.success('Registration successful, Please login.')
+  setName('')
+  setEmail('')
+  setPassword('')
   setLoading(false)
 } catch (err) {
   toast.error(err.response.data)

@@ -1,50 +1,50 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import {Context} from '../context'
+import { Context } from "../context";
 import { useRouter } from "next/router";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   //state access
-  const {state, dispatch}=useContext(Context)
-  
-  const {user} = state
+  const { state, dispatch } = useContext(Context);
+
+  const { user } = state;
 
   //router
-  const router = useRouter()
+  const router = useRouter();
 
-  useEffect(()=>{
-    if(user !== null) router.push('/')
-  }, [user])
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-try {
-  setLoading(true)
-  const {data} = await axios.post(`/api/login`, { email, password})
-  // console.log('Login response', data)
-  dispatch({
-    type:'LOGIN',
-    payload:data
-  })
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`/api/login`, { email, password });
+      // console.log('Login response', data)
+      dispatch({
+        type: "LOGIN",
+        payload: data,
+      });
 
-  //save user details in local storage
-  window.localStorage.setItem('user', JSON.stringify(data))
+      //save user details in local storage
+      window.localStorage.setItem("user", JSON.stringify(data));
 
-  //redirect to dashboard
-  router.push('/')
-  
-  // setLoading(false)
-} catch (err) {
-  toast.error(err.response.data)
-  setLoading(false)
-}    
+      //redirect to dashboard
+      router.push("/");
+
+      // setLoading(false)
+    } catch (err) {
+      toast.error(err.response.data);
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -67,17 +67,24 @@ try {
             placeholder="Enter password"
             required
           />
-          <button type="submit" className="btn btn-block btn-primary"
-          disabled={ !password || !email || loading}
+          <button
+            type="submit"
+            className="btn btn-block btn-primary"
+            disabled={!password || !email || loading}
           >
-            {loading?<SyncOutlined spin/> : 'Submit'}
+            {loading ? <SyncOutlined spin /> : "Submit"}
           </button>
         </form>
-        <p className="text-center p-3">
-Not yet registered?{' '}
-<Link href='/register'>
-<a>Register</a>
-</Link>
+        <p className="text-center pt-3">
+          Not yet registered?{" "}
+          <Link href="/register">
+            <a>Register</a>
+          </Link>
+        </p>
+        <p className="text-center">
+          <Link href="/forgot-password">
+            <a className="text-danger">Forgot Password?</a>
+          </Link>
         </p>
       </div>
     </>
