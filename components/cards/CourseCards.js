@@ -22,11 +22,15 @@ const CourseCard = ({ course }) => {
         >
           <h2 className="font-weight-bold">{name}</h2>
           <p>by {instructor.name}</p>
-          <Badge
-            count={category}
+          {category.split(',').map((badge,i) => (
+            <Badge
+            key={i}
+            count={badge}
             style={{ backgroundColor: "#03a9f3" }}
             className="pb-2 mr-2"
           />
+          ))}
+          
           <h4 className="pt-2">{paid ? currencyFormatter({
               amount: price,
               currency: 'usd'

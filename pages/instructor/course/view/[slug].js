@@ -9,6 +9,7 @@ import {
   UploadOutlined,
   QuestionOutlined,
   CloseOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
@@ -27,6 +28,7 @@ const CourseView = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadButtonText, setUploadButtonText] = useState("Upload Video");
   const [progress, setProgress] = useState(0);
+  const [students, setStudents] = useState(0);
 
   const router = useRouter();
   const { slug } = router.query;
@@ -35,9 +37,20 @@ const CourseView = () => {
     loadCourse();
   }, [slug]);
 
+  useEffect(() => {
+    course && studentCount();
+  }, [course]);
+
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`);
     setCourse(data);
+  };
+
+  const studentCount = async () => {
+    const { data } = await axios.post(`/api/instructor/student-count`, {
+      courseId: course._id,
+    });
+    setStudents(data.length);
   };
 
   const handleAddLesson = async (e) => {
@@ -49,7 +62,7 @@ const CourseView = () => {
       );
 
       setValues({ ...values, title: "", content: "", video: {} });
-      setProgress(0)
+      setProgress(0);
       setUploadButtonText("Upload video");
       setVisible(false);
       setCourse(data);
@@ -106,35 +119,38 @@ const CourseView = () => {
     }
   };
 
-  const handlePublish = async(e, courseId) => {
+  const handlePublish = async (e, courseId) => {
     try {
-      let answer = window.confirm('Course will be published to the marketplace')
-      if(!answer) return
+      let answer = window.confirm(
+        "Course will be published to the marketplace"
+      );
+      if (!answer) return;
 
-      const {data} = await axios.put(`/api/course/publish/${courseId}`)
-      setCourse(data)
-      toast('Congratulations, Your course is now Live')
+      const { data } = await axios.put(`/api/course/publish/${courseId}`);
+      setCourse(data);
+      toast("Congratulations, Your course is now Live");
     } catch (err) {
-      toast('Course publish failed, Try again.')
+      toast("Course publish failed, Try again.");
     }
   };
-  const handleUnpublish = async(e, courseId) => {
+  const handleUnpublish = async (e, courseId) => {
     try {
-      let answer = window.confirm('Course will not be available on the marketplace')
-      if(!answer) return
+      let answer = window.confirm(
+        "Course will not be available on the marketplace"
+      );
+      if (!answer) return;
 
-      const {data} = await axios.put(`/api/course/unpublish/${courseId}`)
-      setCourse(data)
-      toast('Course unpublished')
+      const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
+      setCourse(data);
+      toast("Course unpublished");
     } catch (err) {
-      toast('Course unpublish failed, Try again.')
+      toast("Course unpublish failed, Try again.");
     }
-  }; 
+  };
 
   return (
     <InstructorRoute>
       <div className="contianer-fluid pt-3">
-        {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
         {course && (
           <div className="container-fluid pt-1">
             <div className="media pt-2">
@@ -156,6 +172,10 @@ const CourseView = () => {
                   </div>
 
                   <div className="d-flex pt-4">
+                    <Tooltip title={`${students} Enrolled`}>
+                      <UserSwitchOutlined className="h5 pointer text-info mr-4" />
+                    </Tooltip>
+
                     <Tooltip title="Edit">
                       <EditOutlined
                         onClick={() =>

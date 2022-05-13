@@ -190,7 +190,6 @@ const CreateCourse = () => {
     <InstructorRoute>
       <h1 className="jumbotron text-center square">Edit Course</h1>
       <div className="pt-3 pb-3">
-        {/* {JSON.stringify(values)} */}
         <CourseCreateForm
           handleSubmit={handleSubmit}
           handleImageRemove={handleImageRemove}
@@ -203,9 +202,6 @@ const CreateCourse = () => {
           editPage={true}
         />
       </div>
-      {/* <pre>{JSON.stringify(values, null, 4)}</pre>
-      <hr />
-      <pre>{JSON.stringify(image, null, 4)}</pre> */}
 
       <hr />
       <div className="row pb-5">

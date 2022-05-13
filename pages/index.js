@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import CourseCard from "../components/cards/CourseCards";
+import Header from "../components/Header/Header";
+import Footer from "../components/Header/Footer";
+import NavBar from "../components/Header/NavBar";
 
 const Index = ({courses})=>{
 
@@ -16,7 +19,9 @@ const Index = ({courses})=>{
   // }, [])
   return(
     <>
-    <h1 className="jumbotron text-center bg-primary square">Online Education Market-Place</h1>
+    <NavBar/>
+    <Header/>
+    <h1 className="jumbotron text-center bg-primary square">Dynamic International Academy Online Learning </h1>
     <div className="container-fluid">
       <div className="row">
        {courses.map(course => (
@@ -26,6 +31,7 @@ const Index = ({courses})=>{
        ))}
       </div>
     </div>
+    <Footer/>
     </>
   )
 }
