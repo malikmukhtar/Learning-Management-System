@@ -53,7 +53,8 @@ const BecomeInstructor = () => {
                 shape="round"
                 icon={loading ? <LoadingOutlined/> : <SettingOutlined/>}
                 onClick={becomeInstructor}
-                disabled={(user && user.role && user.role.includes('instructor') || loading)}
+                disabled
+                // disabled={(user && user.role && user.role.includes('instructor') || loading)}
               >
                   {loading ? 'Processing...' : 'Payout Setup'}
               </Button>
